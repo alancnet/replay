@@ -8,7 +8,7 @@ const { INDEX_RECORD_SIZE } = require('./consts')
 const logFileManager = require('./log-file-manager')
 const indexFileManager = require('./index-file-manager')
 
-const topic = (name, _config) => new Promise((resolve, reject) => {
+const topic = (name, _config, eventBus) => new Promise((resolve, reject) => {
   const config = _.defaults(_config, {
     dataRoot: './data',
     recordsPerFile: 10000
@@ -106,9 +106,14 @@ const topic = (name, _config) => new Promise((resolve, reject) => {
         .then(([indexFile, logFile]) =>
           logFile.writeLog(buffer)
             .then(indexFile.writeRecord)
-            .then(() => {
+            .then((indexRecord) => {
               writing = false
               resolve(length++)
+              eventBus.publish(name, {
+                timestamp: indexRecord.timestamp,
+                offset: indexRecord.globalIndex,
+                value: buffer
+              })
               evalWriteBuffer()
             })
         )

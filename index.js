@@ -6,16 +6,17 @@
 
 const topic = require('./src/topic')
 
-// topic('findme').then((topic) => Promise.all(
-//   Array(20000).fill(0).map((x, i) => i)
-//     .map((i) => topic.write(new Buffer(`Hello World - ${i}`)))
-//   )
-// ).catch(console.error)
-// .then(topic.close)
+topic('findme2').then((topic) => Promise.all(
+  Array(2).fill(0).map((x, i) => i)
+    .map((i) => topic.write(new Buffer(`Hello World - ${i} - ${new Date()}`)))
+  )
+).catch(console.error)
+.then(topic.close)
 
 // topic('findme').then((topic) => {
-//   topic.read(0, 10).subscribe((x) => {
-//     console.log(x.value.toString())
+//   topic.read(9999, 2).subscribe((x) => {
+//     x.value = x.value.toString()
+//     console.log(x)
 //   }, console.error, () => {
 //     topic.close()
 //   })

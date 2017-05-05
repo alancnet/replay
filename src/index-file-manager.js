@@ -24,6 +24,13 @@ const indexFileManager = (chunkNumber, recordsPerFile, indexFile) => {
     buffer.writeUIntLE(globalIndex, 24, 8)
 
     return file.append(buffer)
+      .then(() => ({
+        offset: indexRecord.offset,
+        length: indexRecord.length,
+        timestamp,
+        localIndex,
+        globalIndex
+      }))
   }
   return {
     readRecord,
