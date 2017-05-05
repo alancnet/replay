@@ -33,8 +33,10 @@ const topic = (name, _config) => new Promise((resolve, reject) => {
     }
   })
 
-  const getIndexFileManagerByFilename = (name) => getManager(name, indexFileManager)
-  const getLogFileManagerByFilename = (name) => getManager(name, logFileManager)
+  const getIndexFileManagerByFilename = (name, chunkNumber) =>
+    getManager(name, indexFileManager.bind(null, chunkNumber, config.recordsPerFile))
+  const getLogFileManagerByFilename = (name) =>
+    getManager(name, logFileManager)
 
   const getFiles = () => new Promise((resolve, reject) => {
     fs.readdir(path, (err, files) => {
@@ -85,7 +87,7 @@ const topic = (name, _config) => new Promise((resolve, reject) => {
     const indexFilename = `index-${chunkNumber}.bin`
     const logFilename = `log-${chunkNumber}.log`
     return Promise.all([
-      getIndexFileManagerByFilename(indexFilename),
+      getIndexFileManagerByFilename(indexFilename, chunkNumber),
       getLogFileManagerByFilename(logFilename)
     ])
   }
@@ -142,12 +144,16 @@ const topic = (name, _config) => new Promise((resolve, reject) => {
             })
         } else {
           index.readRecord(offset % config.recordsPerFile)
-            .then(log.readLog)
-            .then((value) => observer.next({
-              offset,
-              value
-            }))
-            .then(() => go(offset + 1))
+            .then((record) =>
+              log.readLog(record)
+              .then((value) => observer.next({
+                timestamp: record.timestamp,
+                offset,
+                value
+              }))
+              .then(() => go(offset + 1))
+
+            )
             .catch((err) => observer.error(err))
         }
       }
