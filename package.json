@@ -1,7 +1,7 @@
 {
-  "name": "replay",
-  "version": "1.0.0",
-  "description": "",
+  "name": "streaming-log",
+  "version": "0.0.1",
+  "description": "Centralized streaming log. Like Kafka, but not Kafka.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -14,14 +14,11 @@
     "express-rest": "^1.0.4",
     "filenamify": "^2.0.0",
     "fs-promise": "^2.0.2",
-    "immutable": "^3.8.1",
     "lodash": "^4.17.4",
     "log4js": "^1.1.1",
-    "masterless": "^0.4.1",
     "microservice-config": "0.0.1",
     "mkdirp": "^0.5.1",
-    "rxjs": "^5.3.1",
-    "uuid": "^3.0.1"
+    "rxjs": "^5.3.1"
   },
   "devDependencies": {
     "request": "^2.81.0"
