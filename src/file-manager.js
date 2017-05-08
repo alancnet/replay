@@ -9,9 +9,10 @@ const fileManager = (file) => {
   const open = () => {
     if (timer) clearTimeout(timer)
     timer = setTimeout(close, 1000)
-    return opener || (opener = new Promise((resolve, reject) =>
+    return opener || (opener = new Promise((resolve, reject) => {
+      // console.info(`Opening ${file.fullPath}`)
       fs.open(file.fullPath, 'a+', (err, fd) => err ? reject(err) : resolve(fd))
-    ))
+    }))
   }
 
   const close = () => {
@@ -23,6 +24,7 @@ const fileManager = (file) => {
       const old = opener
       opener = null
       return old.then((fd) => new Promise((resolve, reject) => {
+        // console.info(`Closing ${file.fullPath}`)
         fs.close(fd, (err) => err ? reject(err) : resolve())
       }))
     } else {

@@ -1,5 +1,5 @@
 const { Subject } = require('rxjs')
-const eventBus = () => {
+const createEventBus = () => {
   const topics = {}
   const getTopic = (name) => topics[name] || (topics[name] = new Subject())
   const publish = (name, message) => getTopic(name).next(message)
@@ -12,4 +12,4 @@ const eventBus = () => {
   }
 }
 
-module.exports = eventBus
+module.exports = {createEventBus}

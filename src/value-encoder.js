@@ -1,6 +1,6 @@
 const { encode, decode } = require('base64-arraybuffer')
 
-const valueEncoder = (type) => new Promise((resolve, reject) =>
+const getValueEncoder = (type) => new Promise((resolve, reject) =>
   type === 'buffer'
   ? resolve(bufferEncoder)
   : type === 'base64'
@@ -32,4 +32,4 @@ const jsonEncoder = {
   decode: (obj) => JSON.stringify(obj)
 }
 
-module.exports = valueEncoder
+module.exports = { getValueEncoder }

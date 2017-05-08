@@ -8,7 +8,7 @@ const { INDEX_RECORD_SIZE } = require('./consts')
 const logFileManager = require('./log-file-manager')
 const indexFileManager = require('./index-file-manager')
 
-const topic = (name, _config, eventBus) => new Promise((resolve, reject) => {
+const createTopic = (name, _config, eventBus) => new Promise((resolve, reject) => {
   const config = _.defaults(_config, {
     dataRoot: './data',
     recordsPerFile: 10000
@@ -64,7 +64,10 @@ const topic = (name, _config, eventBus) => new Promise((resolve, reject) => {
       return r && Object.assign({}, file, {
         index: +r[1]
       })
-    }).filter((x) => x))
+    })
+      .filter((x) => x)
+      .sort((a, b) => a.index - b.index)
+    )
 
   const computeLength = () => getIndexFiles().then((indexes) => {
     // Verify all lower indexes are full
@@ -195,4 +198,4 @@ const topic = (name, _config, eventBus) => new Promise((resolve, reject) => {
   })
 })
 
-module.exports = topic
+module.exports = {createTopic}
