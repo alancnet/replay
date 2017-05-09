@@ -9,6 +9,12 @@ const createApiServer = (config, topicManager, eventBus) => {
   const app = express()
   const rest = expressRest(app)
 
+  app.use((req, res, next) => {
+    req.url = req.protocol + '://' + req.get('host') + req.originalUrl
+    console.log(req.method, req.url)
+    next()
+  })
+
   const globalTerminator = new Subject()
 
   const baseUrl = (req) => `${req.protocol}://${req.get('host')}`
@@ -49,6 +55,10 @@ const createApiServer = (config, topicManager, eventBus) => {
     const size = +(req.query.size || 20)
     const timeout = +(req.query.timeout || 5000)
     const encoding = req.query.encoding || 'base64'
+
+    if (offset < 0 || isNaN(offset)) return rest.badRequest('offset is invalid')
+    if (size < 0 || isNaN(size)) return rest.badRequest('size')
+    if (timeout < 0 || isNaN(timeout)) return rest.badRequest('timeout')
 
     return Promise.all([
       topicManager.getTopic(req.params.topicName),
