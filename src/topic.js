@@ -7,6 +7,7 @@ const { Observable } = require('rxjs')
 const { INDEX_RECORD_SIZE } = require('./consts')
 const logFileManager = require('./log-file-manager')
 const indexFileManager = require('./index-file-manager')
+const fifo = require('fifo')
 
 const createTopic = (name, _config, eventBus) => new Promise((resolve, reject) => {
   const config = _.defaults(_config, {
@@ -97,7 +98,7 @@ const createTopic = (name, _config, eventBus) => new Promise((resolve, reject) =
 
   const getManagersForOffset = (offset) => getManagersForChunk(getChunkNumber(offset))
 
-  var writeBuffer = []
+  var writeBuffer = fifo()
   var writing = false
 
   const evalWriteBuffer = () => {

@@ -1,11 +1,12 @@
 const fs = require('fs')
+const fifo = require('fifo')
 
 const fileManager = (file) => {
   // Promise that is opening the file, or null if the file is closed.
   var opener = null
   var timer = null
   var size = file.size
-  var writeBuffer = []
+  var writeBuffer = fifo()
   const open = () => {
     if (timer) clearTimeout(timer)
     timer = setTimeout(close, 1000)
