@@ -12,6 +12,7 @@
     "base64-arraybuffer": "^0.1.5",
     "express": "^4.15.2",
     "express-rest": "^1.0.4",
+    "express-ws": "^3.0.0",
     "fifo": "^2.3.0",
     "filenamify": "^2.0.0",
     "fs-promise": "^2.0.2",
